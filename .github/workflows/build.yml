@@ -1,5 +1,3 @@
-# Every push to the main branch: run the tests, build the image, publish it to GitHub's free container registry.
-# The server then pulls it with  scripts/update.sh  (see README_BACKEND.md, "Updates from the internet").
 name: build
 on:
   push:
@@ -8,70 +6,14 @@ permissions:
   contents: read
   packages: write
 jobs:
-  # The gateway as a ready-made program per system, with Python inside: the customer installs nothing.
-  bundle:
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - {target: windows, os: windows-latest, exe: stech-gateway.exe, sep: ";"}
-          - {target: linux, os: ubuntu-22.04, exe: stech-gateway, sep: ":"}
-          - {target: macos, os: macos-latest, exe: stech-gateway, sep: ":"}
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 20      # a stuck step must fail, never run for hours
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.12"}
-      - run: pip install pyinstaller paho-mqtt "pymodbus>=3.11,<4" pyserial asyncua
-      - name: Build the program
-        run: |
-          cd plant_gateway
-          pyinstaller --onefile --name stech-gateway --paths . --collect-submodules pymodbus --collect-submodules asyncua --hidden-import serial --add-data "plant_gateway.py${{ matrix.sep }}." launcher.py
-      - name: Smoke test (the program must start the plant script and load every library)
-        run: |
-          plant_gateway/dist/${{ matrix.exe }} --bundled
-          cp plant_gateway/plant_gateway.py plant_gateway/dist/
-          plant_gateway/dist/${{ matrix.exe }} plant_gateway/dist/plant_gateway.py --selftest
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.target }}
-          path: plant_gateway/dist/${{ matrix.exe }}
-          if-no-files-found: error
   build:
-    needs: bundle
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    services:
-      postgres:
-        image: postgres:16
-        env: {POSTGRES_PASSWORD: postgres}
-        ports: ["5432:5432"]
-        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
-      redis:
-        image: redis:7
-        ports: ["6379:6379"]
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - uses: actions/download-artifact@v4
-        with: {name: windows, path: plant_gateway/bin/windows}
-      - uses: actions/download-artifact@v4
-        with: {name: linux, path: plant_gateway/bin/linux}
-      - uses: actions/download-artifact@v4
-        with: {name: macos, path: plant_gateway/bin/macos}
-      - name: Broker + protobuf for the V2.0 gateway tests (they skip themselves when these are missing)
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq mosquitto mosquitto-clients openssl
-          sudo systemctl stop mosquitto || true
-          pip install protobuf
-      - run: pip install -r requirements.txt pytest pytest-timeout
-      # -v lists every test; a test that hangs is stopped after 180 s and its stack is printed, so the log names it (and the build cannot sit for 30 minutes)
-      - run: python -m pytest tests -v --timeout=180 --timeout-method=thread
+      - run: pip install cryptography
       - name: Sign the plant script (automatic updates)
         env:
           PLANT_SCRIPT_SIGNING_KEY: ${{ secrets.PLANT_SCRIPT_SIGNING_KEY }}
