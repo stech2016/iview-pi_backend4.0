@@ -51,7 +51,8 @@ def broker(tmp_path_factory):
     if os.geteuid() == 0:
         conf.append("user root")
     (d / "m.conf").write_text("\n".join(conf) + "\n")
-    proc = subprocess.Popen(["mosquitto", "-c", str(d / "m.conf")], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logfile = open(d / "broker.log", "wb")        # a FILE, not a pipe: nobody reads a pipe, and a full pipe would freeze the broker (and every test) for ever
+    proc = subprocess.Popen(["mosquitto", "-c", str(d / "m.conf")], stdout=logfile, stderr=subprocess.STDOUT)
     for _ in range(50):
         try:
             socket.create_connection(("127.0.0.1", plain), 0.2).close()
@@ -60,10 +61,11 @@ def broker(tmp_path_factory):
             time.sleep(0.1)
     else:
         proc.kill()
-        pytest.fail("the broker did not start: " + proc.stdout.read().decode()[:500])
+        pytest.fail("the broker did not start: " + (d / "broker.log").read_text(errors="replace")[:500])
     yield {"plain": plain, "tls": tls, "ca": str(d / "c.pem")}
     proc.terminate()
     proc.wait(5)
+    logfile.close()
 
 
 @pytest.fixture(scope="module")

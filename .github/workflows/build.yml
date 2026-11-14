@@ -69,8 +69,9 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq mosquitto mosquitto-clients openssl
           sudo systemctl stop mosquitto || true
           pip install protobuf
-      - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests -q
+      - run: pip install -r requirements.txt pytest pytest-timeout
+      # -v lists every test; a test that hangs is stopped after 180 s and its stack is printed, so the log names it (and the build cannot sit for 30 minutes)
+      - run: python -m pytest tests -v --timeout=180 --timeout-method=thread
       - name: Sign the plant script (automatic updates)
         env:
           PLANT_SCRIPT_SIGNING_KEY: ${{ secrets.PLANT_SCRIPT_SIGNING_KEY }}
