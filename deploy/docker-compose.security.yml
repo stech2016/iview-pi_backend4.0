@@ -1,0 +1,19 @@
+# OPTIONAL intrusion blocking (CrowdSec, MIT): reads Caddy's log and blocks bad IPs.
+# Start:  podman compose -f docker-compose.yml -f deploy/docker-compose.security.yml up -d
+# Needs Caddy to write its log to the shared volume: add  log { output file /var/log/caddy/access.log }  inside the Caddyfile site block.
+services:
+  crowdsec:
+    image: docker.io/crowdsecurity/crowdsec:latest
+    restart: unless-stopped
+    environment:
+      COLLECTIONS: crowdsecurity/caddy crowdsecurity/http-cve
+    volumes:
+      - caddylogs:/var/log/caddy:ro
+      - ./deploy/crowdsec-acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+      - crowdsecdata:/var/lib/crowdsec/data
+  caddy:
+    volumes:
+      - caddylogs:/var/log/caddy
+volumes:
+  caddylogs:
+  crowdsecdata:

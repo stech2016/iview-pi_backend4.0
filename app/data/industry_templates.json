@@ -1,0 +1,382 @@
+{
+  "water_stp": {
+    "name": "Water / STP / ETP",
+    "description": "Tank level, pump, flow, pressure, pH and turbidity of a water or sewage treatment plant.",
+    "sensors": [
+      {
+        "metric_name": "tank_level",
+        "unit": "%",
+        "data_type": "float32",
+        "low_limit": 15,
+        "high_limit": 90,
+        "alarm_severity": "major",
+        "sensor_type": "level",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "flow_rate",
+        "unit": "m3/h",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 500,
+        "alarm_severity": "minor",
+        "sensor_type": "flow",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "outlet_pressure",
+        "unit": "bar",
+        "data_type": "float32",
+        "low_limit": 1,
+        "high_limit": 8,
+        "alarm_severity": "major",
+        "sensor_type": "pressure",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "ph",
+        "unit": "pH",
+        "data_type": "float32",
+        "low_limit": 6.5,
+        "high_limit": 8.5,
+        "alarm_severity": "major",
+        "sensor_type": "ph",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "turbidity",
+        "unit": "NTU",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 5,
+        "alarm_severity": "minor",
+        "sensor_type": "turbidity",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "pump_run",
+        "unit": "state",
+        "data_type": "uint16",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "status",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "pump_current",
+        "unit": "A",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 40,
+        "alarm_severity": "major",
+        "sensor_type": "current",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "flow_setpoint",
+        "unit": "m3/h",
+        "data_type": "float32",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "setpoint",
+        "register_type": "holding"
+      }
+    ]
+  },
+  "power_meter": {
+    "name": "Power / energy meter",
+    "description": "Voltage, current, power, power factor, frequency and energy of a feeder or generator.",
+    "sensors": [
+      {
+        "metric_name": "voltage_l1",
+        "unit": "V",
+        "data_type": "float32",
+        "low_limit": 380,
+        "high_limit": 440,
+        "alarm_severity": "major",
+        "sensor_type": "voltage",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "voltage_l2",
+        "unit": "V",
+        "data_type": "float32",
+        "low_limit": 380,
+        "high_limit": 440,
+        "alarm_severity": "major",
+        "sensor_type": "voltage",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "voltage_l3",
+        "unit": "V",
+        "data_type": "float32",
+        "low_limit": 380,
+        "high_limit": 440,
+        "alarm_severity": "major",
+        "sensor_type": "voltage",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "current_l1",
+        "unit": "A",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 400,
+        "alarm_severity": "major",
+        "sensor_type": "current",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "active_power",
+        "unit": "kW",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 500,
+        "alarm_severity": "major",
+        "sensor_type": "power",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "power_factor",
+        "unit": "",
+        "data_type": "float32",
+        "low_limit": 0.85,
+        "high_limit": 1.0,
+        "alarm_severity": "minor",
+        "sensor_type": "pf",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "frequency",
+        "unit": "Hz",
+        "data_type": "float32",
+        "low_limit": 49.5,
+        "high_limit": 50.5,
+        "alarm_severity": "major",
+        "sensor_type": "frequency",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "energy",
+        "unit": "kWh",
+        "data_type": "float32",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "energy",
+        "register_type": "holding"
+      }
+    ]
+  },
+  "hvac": {
+    "name": "HVAC / chiller",
+    "description": "Supply and return temperature, humidity, fan and compressor of an air-handling or chiller plant.",
+    "sensors": [
+      {
+        "metric_name": "supply_temp",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": 5,
+        "high_limit": 14,
+        "alarm_severity": "major",
+        "sensor_type": "temperature",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "return_temp",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": 8,
+        "high_limit": 20,
+        "alarm_severity": "major",
+        "sensor_type": "temperature",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "room_humidity",
+        "unit": "%RH",
+        "data_type": "float32",
+        "low_limit": 30,
+        "high_limit": 65,
+        "alarm_severity": "minor",
+        "sensor_type": "humidity",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "fan_speed",
+        "unit": "%",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 100,
+        "alarm_severity": "advisory",
+        "sensor_type": "speed",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "compressor_run",
+        "unit": "state",
+        "data_type": "uint16",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "status",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "filter_dp",
+        "unit": "Pa",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 250,
+        "alarm_severity": "minor",
+        "sensor_type": "pressure",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "supply_setpoint",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "setpoint",
+        "register_type": "holding"
+      }
+    ]
+  },
+  "compressed_air": {
+    "name": "Compressed air",
+    "description": "Header pressure, dew point, temperature and motor load of a compressor house.",
+    "sensors": [
+      {
+        "metric_name": "header_pressure",
+        "unit": "bar",
+        "data_type": "float32",
+        "low_limit": 6,
+        "high_limit": 8.5,
+        "alarm_severity": "major",
+        "sensor_type": "pressure",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "dew_point",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": -40,
+        "high_limit": 3,
+        "alarm_severity": "minor",
+        "sensor_type": "temperature",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "discharge_temp",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 105,
+        "alarm_severity": "major",
+        "sensor_type": "temperature",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "motor_current",
+        "unit": "A",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 120,
+        "alarm_severity": "major",
+        "sensor_type": "current",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "compressor_run",
+        "unit": "state",
+        "data_type": "uint16",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "status",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "pressure_setpoint",
+        "unit": "bar",
+        "data_type": "float32",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "setpoint",
+        "register_type": "holding"
+      }
+    ]
+  },
+  "boiler": {
+    "name": "Boiler / steam",
+    "description": "Steam pressure, drum level, stack temperature and feed-water flow of a boiler.",
+    "sensors": [
+      {
+        "metric_name": "steam_pressure",
+        "unit": "bar",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 12,
+        "alarm_severity": "critical",
+        "sensor_type": "pressure",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "drum_level",
+        "unit": "%",
+        "data_type": "float32",
+        "low_limit": 30,
+        "high_limit": 70,
+        "alarm_severity": "critical",
+        "sensor_type": "level",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "stack_temp",
+        "unit": "degC",
+        "data_type": "float32",
+        "low_limit": 80,
+        "high_limit": 280,
+        "alarm_severity": "major",
+        "sensor_type": "temperature",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "feed_water_flow",
+        "unit": "t/h",
+        "data_type": "float32",
+        "low_limit": 0,
+        "high_limit": 20,
+        "alarm_severity": "minor",
+        "sensor_type": "flow",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "burner_on",
+        "unit": "state",
+        "data_type": "uint16",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "status",
+        "register_type": "holding"
+      },
+      {
+        "metric_name": "steam_setpoint",
+        "unit": "bar",
+        "data_type": "float32",
+        "low_limit": null,
+        "high_limit": null,
+        "alarm_severity": "advisory",
+        "sensor_type": "setpoint",
+        "register_type": "holding"
+      }
+    ]
+  }
+}

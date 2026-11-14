@@ -1,0 +1,33 @@
+# Caddy = the only thing open to the internet (ports 80 and 443). It gets and renews the https certificate by itself.
+{$DOMAIN} {
+	encode gzip
+
+	# Every block below is a "handle": Caddy runs only the FIRST one whose address matches, so the order here is the order that counts.
+
+	# plant scripts: MQTT over an encrypted websocket
+	@mqtt path /mqtt
+	handle @mqtt {
+		reverse_proxy mosquitto:9001
+	}
+
+	# the app: API + live updates + the e-mail pages (reset password ...)
+	@backend path /api/* /reset-password* /activate*
+	handle @backend {
+		reverse_proxy backend:8000
+	}
+
+	# the WEB version of the app (Flutter web build copied into ./web, see README "Web version"). Any other address opens the app.
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+}

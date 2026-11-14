@@ -1,0 +1,67 @@
+# STECH iVIEW cloud backend v2.0. Start:  podman compose up -d --build   (docker compose works the same)     Stop:  podman compose down
+# Everything you may need to change is in .env (made for you by:  python3 setup.py)
+services:
+  db:                      # PostgreSQL on this server. Not started when you use a managed database (setup.py decides)
+    image: docker.io/library/postgres:16-alpine
+    profiles: ["localdb"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_ADMIN_USER}
+      POSTGRES_PASSWORD: ${PG_ADMIN_PASSWORD}
+      POSTGRES_DB: ${MASTER_DB_NAME}
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"], interval: 5s, retries: 20}
+
+  valkey:                  # instant push of live values/alarms to the app (open-source Redis)
+    image: docker.io/valkey/valkey:7-alpine
+    restart: unless-stopped
+
+  mosquitto:               # receives the plant scripts' readings (1883 / 9001 inside) AND the customers' own gateways (8883, TLS, V2.0)
+    image: docker.io/library/eclipse-mosquitto:2
+    restart: unless-stopped
+    ports: ["8883:8883"]      # the only broker door open to the internet: encrypted, one login per customer gateway. Open TCP 8883 in the server's firewall / network security group.
+    environment:
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+      MQTT_GATEWAY_PASSWORD: ${MQTT_GATEWAY_PASSWORD}
+      MQTT_ADMIN_PASSWORD: ${MQTT_ADMIN_PASSWORD}
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/acl:/mosquitto/config/acl:ro
+      - ./mosquitto/entrypoint.sh:/mosquitto/entrypoint.sh:ro
+      - mqttdata:/mosquitto/data      # holds the customers' gateway logins (dynamic-security.json): part of every backup
+      - caddydata:/caddy:ro           # the https certificate Caddy fetched: the 8883 door uses the same one
+    entrypoint: ["/bin/sh", "/mosquitto/entrypoint.sh"]
+
+  backend:                 # the API the app talks to
+    image: ${IVIEW_IMAGE:-stech-iview-backend:2.0}   # IVIEW_IMAGE in .env = the image the build pipeline published (server pulls it)
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    depends_on: [valkey, mosquitto]
+
+  ingest:                  # takes plant readings from MQTT -> database, watches the plant script, raises the gateway alarm
+    image: ${IVIEW_IMAGE:-stech-iview-backend:2.0}
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    command: ["python", "-m", "app.workers.mqtt_ingest"]
+    healthcheck: {disable: true}   # this worker serves no web page, so the web health check of the image does not apply
+    depends_on: [valkey, mosquitto]
+
+  caddy:                   # https in front of everything (automatic certificate)
+    image: docker.io/library/caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./web:/srv/web:ro       # Flutter web build (flutter build web --release) goes in this folder
+      - caddydata:/data
+    depends_on: [backend]
+
+volumes:
+  pgdata:
+  mqttdata:
+  caddydata:

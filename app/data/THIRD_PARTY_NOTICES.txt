@@ -1,0 +1,26 @@
+STECH iVIEW - open-source components used
+==========================================
+STECH iVIEW is built with the free, open-source components below. All may be used in a commercial product.
+Each keeps its own licence; the full licence texts are available from the project pages named here.
+
+Gateway program (this folder)
+  Python (PSF License)                       python.org
+  pymodbus (BSD-3-Clause)                    github.com/pymodbus-dev/pymodbus
+  paho-mqtt (Eclipse Public Licence 2.0 / Eclipse Distribution Licence = BSD-3-Clause)   github.com/eclipse/paho.mqtt.python
+  pyserial (BSD-3-Clause)                    github.com/pyserial/pyserial
+  cryptography (Apache-2.0 or BSD-3-Clause)  github.com/pyca/cryptography
+  asyncua - OPC UA (LGPL-3.0)                github.com/FreeOpcUa/opcua-asyncio
+  PyInstaller - makes STECH-Gateway.exe (GPL-2.0 with a special exception that allows commercial programs)   pyinstaller.org
+
+Server (cloud)
+  FastAPI, Starlette, Pydantic, Uvicorn, SQLAlchemy, Alembic (MIT / BSD)
+  psycopg2 (LGPL-3.0 with exceptions)        psycopg.org
+  pycountry (LGPL-2.1)                       github.com/pycountry/pycountry
+  PostgreSQL (PostgreSQL Licence), Valkey/Redis-compatible store (BSD-3-Clause), Eclipse Mosquitto (EPL-2.0 / EDL), Caddy (Apache-2.0)
+
+App
+  Flutter and Dart (BSD-3-Clause), Provider, http, web_socket_channel (BSD / MIT)
+  Map pictures: (c) OpenStreetMap contributors, ODbL (openstreetmap.org/copyright)
+
+LGPL components (asyncua, psycopg2, pycountry) are used unmodified, as separate libraries. A customer may replace them with
+another version of the same library; their source code is available from the project pages above.

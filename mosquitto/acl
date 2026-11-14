@@ -1,0 +1,18 @@
+# Plant scripts share ONE login that can only SEND (write) and listen to the "settings changed" ping and to the commands (cmd) for the plant.
+# A command is signed by the cloud with the key of ITS gateway and carries an expiry time: another gateway or a replayed message is ignored.
+# Every message is also signed with the key of the gateway named in its topic (each plant script has its OWN key),
+# and the backend throws away anything not signed by that gateway or outside its State + Region, so one plant can
+# never write into another company's - or another region's - data.
+user stech_gateway
+topic write stech/#
+topic read stech/+/gw/+/config
+topic read stech/+/gw/+/cmd
+
+# The backend reads everything and sends the "settings changed" ping.
+# V2.0: it also reads what customer gateways publish (JSON + Sparkplug B) and publishes the write commands to them.
+# The customer gateways themselves are NOT in this file: each plant login is created live by the cloud (Dynamic Security
+# plugin) and may only touch iview/<plant id>/# and spBv1.0/<plant id>/#.
+user stech_backend
+topic readwrite stech/#
+topic readwrite iview/#
+topic readwrite spBv1.0/#

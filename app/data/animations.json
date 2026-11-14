@@ -1,0 +1,297 @@
+{
+ "_help": "Animation rules per template. Each object binds to a sensor by its role (sensor_type). Edit here to change the default look; an administrator can also override it per device in the app (Edit animation). Types: tank pump motor fan flame gauge pipe valve thermometer value counter.",
+ "generic": [
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "*"
+   },
+   "label": "Sensor",
+   "x": 10,
+   "y": 10
+  }
+ ],
+ "water_stp": [
+  {
+   "type": "tank",
+   "bind": {
+    "sensor_type": "level"
+   },
+   "label": "Tank level",
+   "x": 10,
+   "y": 20,
+   "w": 22,
+   "h": 45
+  },
+  {
+   "type": "pipe",
+   "bind": {
+    "sensor_type": "flow"
+   },
+   "label": "Flow",
+   "x": 34,
+   "y": 40,
+   "w": 26,
+   "h": 6,
+   "speed_from": "flow"
+  },
+  {
+   "type": "pump",
+   "bind": {
+    "sensor_type": "status"
+   },
+   "label": "Pump",
+   "x": 62,
+   "y": 34,
+   "animation": "spin_when_on"
+  },
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "pressure"
+   },
+   "label": "Outlet pressure",
+   "x": 78,
+   "y": 18
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "ph"
+   },
+   "label": "pH",
+   "x": 78,
+   "y": 55
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "turbidity"
+   },
+   "label": "Turbidity",
+   "x": 78,
+   "y": 70
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "current"
+   },
+   "label": "Pump current",
+   "x": 50,
+   "y": 70
+  }
+ ],
+ "power_meter": [
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "voltage"
+   },
+   "label": "Voltage",
+   "x": 8,
+   "y": 15
+  },
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "current"
+   },
+   "label": "Current",
+   "x": 38,
+   "y": 15
+  },
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "power"
+   },
+   "label": "Power",
+   "x": 68,
+   "y": 15
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "pf"
+   },
+   "label": "Power factor",
+   "x": 8,
+   "y": 65
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "frequency"
+   },
+   "label": "Frequency",
+   "x": 38,
+   "y": 65
+  },
+  {
+   "type": "counter",
+   "bind": {
+    "sensor_type": "energy"
+   },
+   "label": "Energy",
+   "x": 68,
+   "y": 65
+  }
+ ],
+ "hvac": [
+  {
+   "type": "fan",
+   "bind": {
+    "sensor_type": "speed"
+   },
+   "label": "Fan",
+   "x": 12,
+   "y": 30,
+   "animation": "spin_speed"
+  },
+  {
+   "type": "thermometer",
+   "bind": {
+    "sensor_type": "temperature"
+   },
+   "label": "Supply temp",
+   "x": 40,
+   "y": 20
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "humidity"
+   },
+   "label": "Humidity",
+   "x": 65,
+   "y": 20
+  },
+  {
+   "type": "pipe",
+   "bind": {
+    "sensor_type": "pressure"
+   },
+   "label": "Air path",
+   "x": 20,
+   "y": 60,
+   "w": 60,
+   "h": 5,
+   "speed_from": "speed"
+  },
+  {
+   "type": "motor",
+   "bind": {
+    "sensor_type": "status"
+   },
+   "label": "Compressor",
+   "x": 70,
+   "y": 50,
+   "animation": "spin_when_on"
+  }
+ ],
+ "compressed_air": [
+  {
+   "type": "motor",
+   "bind": {
+    "sensor_type": "status"
+   },
+   "label": "Compressor",
+   "x": 10,
+   "y": 30,
+   "animation": "spin_when_on"
+  },
+  {
+   "type": "tank",
+   "bind": {
+    "sensor_type": "pressure"
+   },
+   "label": "Air receiver",
+   "x": 40,
+   "y": 15,
+   "w": 22,
+   "h": 45,
+   "max_from": "high_limit"
+  },
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "pressure"
+   },
+   "label": "Header pressure",
+   "x": 70,
+   "y": 15
+  },
+  {
+   "type": "thermometer",
+   "bind": {
+    "sensor_type": "temperature"
+   },
+   "label": "Discharge temp",
+   "x": 70,
+   "y": 55
+  },
+  {
+   "type": "value",
+   "bind": {
+    "sensor_type": "current"
+   },
+   "label": "Motor current",
+   "x": 10,
+   "y": 70
+  }
+ ],
+ "boiler": [
+  {
+   "type": "flame",
+   "bind": {
+    "sensor_type": "status"
+   },
+   "label": "Burner",
+   "x": 12,
+   "y": 50,
+   "animation": "flame_when_on"
+  },
+  {
+   "type": "tank",
+   "bind": {
+    "sensor_type": "level"
+   },
+   "label": "Drum level",
+   "x": 35,
+   "y": 15,
+   "w": 24,
+   "h": 45
+  },
+  {
+   "type": "gauge",
+   "bind": {
+    "sensor_type": "pressure"
+   },
+   "label": "Steam pressure",
+   "x": 66,
+   "y": 12
+  },
+  {
+   "type": "thermometer",
+   "bind": {
+    "sensor_type": "temperature"
+   },
+   "label": "Stack temp",
+   "x": 66,
+   "y": 55
+  },
+  {
+   "type": "pipe",
+   "bind": {
+    "sensor_type": "flow"
+   },
+   "label": "Feed water",
+   "x": 10,
+   "y": 20,
+   "w": 22,
+   "h": 5,
+   "speed_from": "flow"
+  }
+ ]
+}

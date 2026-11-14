@@ -1,0 +1,11 @@
+.env
+.git
+__pycache__
+*.pyc
+*.md
+mosquitto/*
+!mosquitto/acl
+!mosquitto/mosquitto.conf
+
+Caddyfile
+docker-compose.yml
